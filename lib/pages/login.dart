@@ -2,6 +2,8 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_firebase/pages/home.dart';
+import 'package:flutter_firebase/pages/register.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -32,8 +34,27 @@ class _LoginState extends State<Login> {
   //   } catch (e) {}
   // }
 
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
+
+  Future<void> login() async {
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: emailController.text.trim(),
+        password: passwordController.text.trim(),
+      );
+      debugPrint("Successs");
+      // Navigate to the next screen upon successful login
+      // Navigator.push(...)
+    } catch (e) {
+      debugPrint('Failed to sign in: $e');
+      // Show error message to the user
+      // ScaffoldMessenger.of(context).showSnackBar(...)
+    }
+  }
 
   Future<User?> signInWithGoogle() async {
     try {
@@ -84,102 +105,137 @@ class _LoginState extends State<Login> {
               color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 120,
-          ),
-          Center(
-              child: Text(
-            "Welcome",
-            style: TextStyle(color: Colors.black, fontSize: 35),
-          )),
-          SizedBox(
-            height: 45,
-          ),
-          Container(
-            margin: EdgeInsets.only(right: 12, left: 12),
-            padding: EdgeInsets.only(left: 12),
-            decoration: BoxDecoration(
-                color: Colors.grey[300],
-                border: Border.all(style: BorderStyle.none),
-                borderRadius: BorderRadius.circular(16)),
-            child: TextField(
-              decoration: InputDecoration(
-                  hintText: "Username",
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(fontSize: 20)),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 120,
             ),
-          ),
-          SizedBox(
-            height: 18,
-          ),
-          Container(
-            margin: EdgeInsets.only(right: 12, left: 12),
-            padding: EdgeInsets.only(left: 12),
-            decoration: BoxDecoration(
-                color: Colors.grey[300],
-                border: Border.all(style: BorderStyle.none),
-                borderRadius: BorderRadius.circular(16)),
-            child: TextField(
-              decoration: InputDecoration(
-                  hintText: "Password",
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(fontSize: 20)),
-            ),
-          ),
-          SizedBox(
-            height: 45,
-          ),
-          Container(
-            width: 350,
-            height: 45,
-            decoration: BoxDecoration(
-                color: Colors.blue,
-                border: Border.all(style: BorderStyle.none),
-                borderRadius: BorderRadius.circular(16)),
-            child: GestureDetector(
-              onTap: () {},
-              child: Center(
+            Center(
                 child: Text(
-                  "Login",
-                  style: TextStyle(color: Colors.white, fontSize: 24),
+              "Welcome",
+              style: TextStyle(color: Colors.black, fontSize: 35),
+            )),
+            SizedBox(
+              height: 45,
+            ),
+            Container(
+              margin: EdgeInsets.only(right: 12, left: 12),
+              padding: EdgeInsets.only(left: 12),
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  border: Border.all(style: BorderStyle.none),
+                  borderRadius: BorderRadius.circular(16)),
+              child: TextField(
+                controller: emailController,
+                decoration: InputDecoration(
+                    hintText: "Username",
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(fontSize: 20)),
+              ),
+            ),
+            SizedBox(
+              height: 18,
+            ),
+            Container(
+              margin: EdgeInsets.only(right: 12, left: 12),
+              padding: EdgeInsets.only(left: 12),
+              decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  border: Border.all(style: BorderStyle.none),
+                  borderRadius: BorderRadius.circular(16)),
+              child: TextField(
+                controller: passwordController,
+                decoration: InputDecoration(
+                    hintText: "Password",
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(fontSize: 20)),
+              ),
+            ),
+            SizedBox(
+              height: 45,
+            ),
+            Container(
+              width: 350,
+              height: 45,
+              decoration: BoxDecoration(
+                  color: Colors.blue,
+                  border: Border.all(style: BorderStyle.none),
+                  borderRadius: BorderRadius.circular(16)),
+              child: GestureDetector(
+                onTap: () {
+                  login();
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Home(),
+                      ));
+                },
+                child: Center(
+                  child: Text(
+                    "Login",
+                    style: TextStyle(color: Colors.white, fontSize: 24),
+                  ),
                 ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 25,
-          ),
-          Container(
-            width: 350,
-            height: 45,
-            decoration: BoxDecoration(
-                color: Colors.red,
-                border: Border.all(style: BorderStyle.none),
-                borderRadius: BorderRadius.circular(16)),
-            child: GestureDetector(
-                onTap: () {
-                  signInWithGoogle();
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.google,
-                      color: Colors.white,
-                    ),
-                    SizedBox(
-                      width: 14,
-                    ),
-                    Text(
-                      "Sign In with Google",
-                      style: TextStyle(color: Colors.white, fontSize: 22),
-                    ),
-                  ],
-                )),
-          )
-        ],
+            SizedBox(
+              height: 25,
+            ),
+            Container(
+              width: 350,
+              height: 45,
+              decoration: BoxDecoration(
+                  color: Colors.red,
+                  border: Border.all(style: BorderStyle.none),
+                  borderRadius: BorderRadius.circular(16)),
+              child: GestureDetector(
+                  onTap: () {
+                    signInWithGoogle();
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) => Home(),
+                    //     ));
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        FontAwesomeIcons.google,
+                        color: Colors.white,
+                      ),
+                      SizedBox(
+                        width: 14,
+                      ),
+                      Text(
+                        "Sign In with Google",
+                        style: TextStyle(color: Colors.white, fontSize: 22),
+                      ),
+                    ],
+                  )),
+            ),
+            SizedBox(
+              height: 17,
+            ),
+            InkWell(
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RegisterPage(),
+                  )),
+              child: Text(
+                "Register Here",
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 25,
+                    decoration: TextDecoration.underline,
+                    decorationColor: Colors.blue),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
