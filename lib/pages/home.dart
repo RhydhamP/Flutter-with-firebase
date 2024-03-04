@@ -1,7 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
-// import 'dart:html';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_firebase/pages/employee.dart';
@@ -20,10 +16,10 @@ class _HomeState extends State<Home> {
   TextEditingController ageController = TextEditingController();
   TextEditingController locationController = TextEditingController();
 
-  Stream? EmployeeStream;
+  Stream? employeeStream;
 
   getontheload() async {
-    EmployeeStream = await DatabaseMethods().getEmployeeDetails();
+    employeeStream = await DatabaseMethods().getEmployeeDetails();
     setState(() {});
   }
 
@@ -35,7 +31,7 @@ class _HomeState extends State<Home> {
 
   Widget allEmployeeDetails() {
     return StreamBuilder(
-      stream: EmployeeStream,
+      stream: employeeStream,
       builder: (context, AsyncSnapshot snapshot) {
         return snapshot.hasData
             ? ListView.builder(
@@ -43,12 +39,12 @@ class _HomeState extends State<Home> {
                 itemBuilder: (context, index) {
                   DocumentSnapshot ds = snapshot.data.docs[index];
                   return Container(
-                    margin: EdgeInsets.only(bottom: 20),
+                    margin: const EdgeInsets.only(bottom: 20),
                     child: Material(
                       elevation: 5,
                       borderRadius: BorderRadius.circular(20),
                       child: Container(
-                        padding: EdgeInsets.all(15),
+                        padding: const EdgeInsets.all(15),
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
                             color: Colors.white,
@@ -59,27 +55,27 @@ class _HomeState extends State<Home> {
                             Row(
                               children: [
                                 Text(
-                                  "Name : " + ds["Name"],
-                                  style: TextStyle(
+                                  "Name : ${ds["Name"]}",
+                                  style: const TextStyle(
                                       color: Colors.blue,
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold),
                                 ),
-                                Spacer(),
+                                const Spacer(),
                                 GestureDetector(
                                   onTap: () {
                                     nameController.text = ds['Name'];
                                     ageController.text = ds['Age'];
                                     locationController.text = ds['Location'];
 
-                                    EditEmployeeDetail(ds['Id']);
+                                    editEmployeeDetail(ds['Id']);
                                   },
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.edit,
                                     color: Colors.orange,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 GestureDetector(
@@ -87,7 +83,7 @@ class _HomeState extends State<Home> {
                                     await DatabaseMethods()
                                         .deleteEmployeeDetail(ds['Id']);
                                   },
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.delete,
                                     color: Colors.orange,
                                   ),
@@ -95,15 +91,15 @@ class _HomeState extends State<Home> {
                               ],
                             ),
                             Text(
-                              "Age : " + ds["Age"],
-                              style: TextStyle(
+                              "Age : ${ds["Age"]}",
+                              style: const TextStyle(
                                   color: Colors.orange,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              "Location : " + ds["Location"],
-                              style: TextStyle(
+                              "Location : ${ds["Location"]}",
+                              style: const TextStyle(
                                   color: Colors.blue,
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold),
@@ -128,48 +124,48 @@ class _HomeState extends State<Home> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => Employee(),
+                builder: (context) => const Employee(),
               ));
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
       appBar: AppBar(
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
+            const SizedBox(
               width: 4,
             ),
-            Text(
+            const Text(
               "Flutter",
               style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
             ),
-            Text(
+            const Text(
               "Firebase",
               style:
                   TextStyle(color: Colors.orange, fontWeight: FontWeight.bold),
             ),
-            Spacer(),
+            const Spacer(),
             GestureDetector(
                 onTap: () {
                   Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => Login(),
-              ));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const Login(),
+                      ));
                 },
-                child: Text(
+                child: const Text(
                   "Login",
                   style: TextStyle(color: Colors.lightBlue, fontSize: 22),
                 )),
-            SizedBox(
+            const SizedBox(
               width: 6,
             ),
           ],
         ),
       ),
       body: Container(
-        padding: EdgeInsets.only(left: 15, right: 15, top: 20),
+        padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
         child: Column(
           children: [Expanded(child: allEmployeeDetails())],
         ),
@@ -177,10 +173,10 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Future EditEmployeeDetail(String id) => showDialog(
+  Future editEmployeeDetail(String id) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          content: Container(
+          content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -190,19 +186,19 @@ class _HomeState extends State<Home> {
                       onTap: () {
                         Navigator.pop(context);
                       },
-                      child: Icon(Icons.cancel),
+                      child: const Icon(Icons.cancel),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 60,
                     ),
-                    Text(
+                    const Text(
                       "Edit ",
                       style: TextStyle(
                           color: Colors.blue,
                           fontSize: 20,
                           fontWeight: FontWeight.bold),
                     ),
-                    Text(
+                    const Text(
                       "Details",
                       style: TextStyle(
                           color: Colors.orange,
@@ -211,67 +207,67 @@ class _HomeState extends State<Home> {
                     ),
                   ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
-                Text(
+                const Text(
                   "Name :",
                   style: TextStyle(fontSize: 22, color: Colors.black),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 14),
+                  padding: const EdgeInsets.only(left: 14),
                   decoration: BoxDecoration(
                       border: Border.all(),
                       borderRadius: BorderRadius.circular(10)),
                   child: TextField(
                     controller: nameController,
-                    decoration: InputDecoration(border: InputBorder.none),
+                    decoration: const InputDecoration(border: InputBorder.none),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Text(
+                const Text(
                   "Age :",
                   style: TextStyle(fontSize: 22, color: Colors.black),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 14),
+                  padding: const EdgeInsets.only(left: 14),
                   decoration: BoxDecoration(
                       border: Border.all(),
                       borderRadius: BorderRadius.circular(10)),
                   child: TextField(
                     controller: ageController,
-                    decoration: InputDecoration(border: InputBorder.none),
+                    decoration: const InputDecoration(border: InputBorder.none),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
-                Text(
+                const Text(
                   "Location :",
                   style: TextStyle(fontSize: 22, color: Colors.black),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Container(
-                  padding: EdgeInsets.only(left: 14),
+                  padding: const EdgeInsets.only(left: 14),
                   decoration: BoxDecoration(
                       border: Border.all(),
                       borderRadius: BorderRadius.circular(10)),
                   child: TextField(
                     controller: locationController,
-                    decoration: InputDecoration(border: InputBorder.none),
+                    decoration: const InputDecoration(border: InputBorder.none),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Center(
@@ -289,7 +285,7 @@ class _HomeState extends State<Home> {
                             Navigator.pop(context);
                           });
                         },
-                        child: Text("Update")))
+                        child: const Text("Update")))
               ],
             ),
           ),
